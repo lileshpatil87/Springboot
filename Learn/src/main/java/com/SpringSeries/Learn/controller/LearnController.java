@@ -1,6 +1,7 @@
 package com.SpringSeries.Learn.controller;
 
 import com.SpringSeries.Learn.entity.LearnEntity;
+import com.SpringSeries.Learn.service.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,31 +15,12 @@ import java.util.Map;
 @RequestMapping("learn")
 public class LearnController {
 
-    private final Map<Integer, LearnEntity> entity = new HashMap<>();
-
-    @GetMapping
-    public List<LearnEntity> get() {
-        return new ArrayList<>(entity.values());
-    }
+    @Autowired
+    private EntityService entityService;
 
     @PostMapping
-    public LearnEntity createEntity(@RequestBody LearnEntity value) {
-        entity.put(value.getId(), value);
-        return value;
+    public LearnEntity post(@RequestBody LearnEntity value) {
+        return entityService.createEntity(value);
     }
 
-    @GetMapping("/{id}")
-    public LearnEntity getById(@PathVariable int id) {
-        return entity.get(id);
-    }
-
-    @PutMapping("/{id}")
-    public LearnEntity updateEntity(@PathVariable int id,@RequestBody LearnEntity value) {
-        return entity.replace(id,value);
-    }
-
-    @DeleteMapping("/{id}")
-    public LearnEntity deleteEntity(@PathVariable int id) {
-        return entity.remove(id);
-    }
 }
