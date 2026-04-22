@@ -3,7 +3,7 @@ package com.SpringSeries.Learn.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "entity")
+@Document(collection = "Entity")
 public class LearnEntity {
 
     @Id

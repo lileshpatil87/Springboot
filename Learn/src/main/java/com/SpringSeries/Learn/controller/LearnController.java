@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("learn")
@@ -17,6 +14,11 @@ public class LearnController {
 
     @Autowired
     private EntityService entityService;
+    
+    @GetMapping("{id}")
+    public Optional<LearnEntity> get(@PathVariable String id){
+        return entityService.getEntity(id);
+    }
 
     @PostMapping
     public LearnEntity post(@RequestBody LearnEntity value) {
