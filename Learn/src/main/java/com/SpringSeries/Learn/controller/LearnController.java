@@ -14,6 +14,11 @@ public class LearnController {
 
     @Autowired
     private EntityService entityService;
+
+    @GetMapping("all")
+    public List<LearnEntity> getAll() {
+        return entityService.getAll();
+    }
     
     @GetMapping("{id}")
     public Optional<LearnEntity> get(@PathVariable String id){
@@ -23,6 +28,16 @@ public class LearnController {
     @PostMapping
     public LearnEntity post(@RequestBody LearnEntity value) {
         return entityService.createEntity(value);
+    }
+
+    @PutMapping("")
+    public LearnEntity put(@RequestBody LearnEntity value) {
+        return entityService.update(value);
+    }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable String id) {
+        return entityService.delete(id);
     }
 
 }
