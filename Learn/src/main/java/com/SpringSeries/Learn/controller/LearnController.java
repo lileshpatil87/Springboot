@@ -2,7 +2,9 @@ package com.SpringSeries.Learn.controller;
 
 import com.SpringSeries.Learn.entity.LearnEntity;
 import com.SpringSeries.Learn.service.EntityService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,28 +18,49 @@ public class LearnController {
     private EntityService entityService;
 
     @GetMapping("all")
-    public List<LearnEntity> getAll() {
-        return entityService.getAll();
+    public ResponseEntity<?> getAll() {
+        List<LearnEntity> le = entityService.getAll();
+        if(!le.isEmpty()){
+            return new ResponseEntity<>( le, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @GetMapping("{id}")
-    public Optional<LearnEntity> get(@PathVariable String id){
-        return entityService.getEntity(id);
+    public ResponseEntity<?> get(@PathVariable ObjectId id){
+        Optional<LearnEntity> le =  entityService.getEntity(id);
+        if(!le.isEmpty()){
+            return new ResponseEntity<>(le,HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
-    public LearnEntity post(@RequestBody LearnEntity value) {
-        return entityService.createEntity(value);
+    public ResponseEntity<?> post(@RequestBody LearnEntity value) {
+        try {
+            LearnEntity le = entityService.createEntity(value);
+            return new ResponseEntity<LearnEntity>(le,HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("")
-    public LearnEntity put(@RequestBody LearnEntity value) {
-        return entityService.update(value);
+    public ResponseEntity<?> put(@RequestBody LearnEntity value) {
+        LearnEntity le= entityService.update(value);
+        if(le.getId() != null){
+            return new ResponseEntity<LearnEntity>(le,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("{id}")
-    public String delete(@PathVariable String id) {
-        return entityService.delete(id);
+    public ResponseEntity<?> delete(@PathVariable ObjectId id) {
+        if(entityService.delete(id) != null){
+            return new ResponseEntity<>("DELETED",HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
